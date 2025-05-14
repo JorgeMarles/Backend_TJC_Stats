@@ -22,6 +22,6 @@ RUN npm run build
 FROM base AS prod
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist .
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=8084
+EXPOSE 8084
 ENTRYPOINT [ "node", "index.js" ]
