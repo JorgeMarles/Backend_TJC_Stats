@@ -1,7 +1,7 @@
 import ampq from 'amqplib';
 import { RABBITMQ_HOST, RABBITMQ_PASSWORD, RABBITMQ_PORT, RABBITMQ_USERNAME } from '../config';
 import { createContest, createParticipation } from './ContestService';
-import { createProblem, createTopic } from './ProblemService';
+import { createProblem, createSubmission, createTopic } from './ProblemService';
 import { createUser } from './UserService';
 
 
@@ -116,6 +116,7 @@ const rmq: RabbitMQUtils = {
 
                 try {
                     const data: Message = JSON.parse(msg.content.toString());
+                    console.log("RECEIVED MESSAGE", data)
                     if(data.type === 'contest'){
                         const contest = data.data as ContestData;
                         const { contestId, endTime, numProblems, difficulty } = contest;
@@ -186,7 +187,8 @@ const rmq: RabbitMQUtils = {
                     if(data.type === 'submission'){
                         const submission = data.data as SubmissionData;
                         const { submissionId, userId, problemId, veredict, submissionTime } = submission;
-                        // Handle submission data here
+                        
+                        await createSubmission(submissionId, userId, problemId, veredict, submissionTime)
                     }
                     channel.ack(msg);
                 } catch (error) {
