@@ -57,7 +57,11 @@ export const createParticipation = async (contestId: number, userId: number, pos
     console.log(`Creating participation with contestId ${contestId}, userId ${userId}, position ${position}, problemsSolved ${problemsSolved}, numAttempts ${numAttempts}, penalty ${penalty}, percentile ${percentile}`);
     const contest = await ContestRepository.findOne({ where: { id: contestId } });
     if (!contest) {
-        throw new Error(`Contest with id ${contestId} not found`);
+        // Ya son las 4 AM, y ando mamao, eso es para evitar una condicion de carrera cuando vaya a crear la participacion
+        await new Promise(r => setTimeout(r, 1000))
+        await createParticipation(contestId, userId, position, problemsSolved, numAttempts, penalty, percentile)
+        return
+        // throw new Error(`Contest with id ${contestId} not found`);
     }
     const user = await UserRepository.findOne({ where: { id: userId } });
     if (!user) {

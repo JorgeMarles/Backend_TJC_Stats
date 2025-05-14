@@ -15,7 +15,7 @@ type TopicInfo = {
 }
 
 type ProblemStats = {
-    vereditcs: VeredictInfo[];
+    veredicts: VeredictInfo[];
     topics: TopicInfo[];
     total_problems: number;
     total_solved: number;
@@ -95,7 +95,7 @@ export const getProblemStats = async (userId: number): Promise<ProblemStats> => 
     }));    
 
     return {
-        vereditcs: veredictInfo,
+        veredicts: veredictInfo,
         topics: topicInfo,
         total_problems: totalProblems,
         total_solved: veredictCounts["Accepted"],
