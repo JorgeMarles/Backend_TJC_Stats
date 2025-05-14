@@ -42,6 +42,21 @@ export const getProblemStats = async (userId: number): Promise<ProblemStats> => 
             problem: {
                 topic: true
             }
+        },
+        select: {
+            // Especificar exactamente qué campos necesitas
+            id: true,
+            veredict: true,
+            user: {
+                id: true
+            },
+            problem: {
+                id: true,
+                topic: {
+                    id: true,
+                    name: true
+                }
+            }
         }
     })
 
@@ -77,14 +92,14 @@ export const getProblemStats = async (userId: number): Promise<ProblemStats> => 
         id: parseInt(id),
         name: topicsId[parseInt(id)],
         total
-    }));
+    }));    
 
     return {
         vereditcs: veredictInfo,
         topics: topicInfo,
         total_problems: totalProblems,
         total_solved: veredictCounts["Accepted"],
-        average_attempts: averageAttempts
+        average_attempts: (!isNaN(averageAttempts) && isFinite(averageAttempts)) ? averageAttempts : 0
     };
 }
 

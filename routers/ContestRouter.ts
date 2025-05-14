@@ -4,7 +4,7 @@ import { getContests } from '../controllers/ContestController';
 
 const router = Router();
 
-router.get('/contests/:id', authenticate(['user', 'admin']), getContests);
+router.get('/:id/contests', authenticate(['user', 'admin']), getContests);
 
 export default router;
 

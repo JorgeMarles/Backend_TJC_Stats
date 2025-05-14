@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticateToken';
-import { getProblemStats } from '../services/ProblemService';
+import { getProblems } from '../controllers/ProblemController';
 
 const router = Router();
 
-router.get('/problems/:id', authenticate(['user', 'admin']), getProblemStats);
+router.get('/:id/problems', authenticate(['user', 'admin']), getProblems);
 
 export default router;
 
