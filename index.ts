@@ -3,6 +3,9 @@ import cors from 'cors';
 import express from 'express';
 import "reflect-metadata";
 import { PORT, URL_FRONTEND } from './config';
+import { AppDataSource } from './database';
+import ContestRouter from './routers/ContestRouter';
+import ProblemRouter from './routers/ProblemRouter';
 
 const app = express();
 
@@ -12,10 +15,12 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
+app.use('/stats', ContestRouter)
+app.use('/stats', ProblemRouter)
 
 const run = async () => {
     try {
-        //await AppDataSource.initialize();
+        await AppDataSource.initialize();
     }
     catch (e: unknown) {
         if (e instanceof Error) {
