@@ -6,6 +6,7 @@ import { PORT, URL_FRONTEND } from './config';
 import { AppDataSource } from './database';
 import ContestRouter from './routers/ContestRouter';
 import ProblemRouter from './routers/ProblemRouter';
+import { connectRabbitMQ } from './services/RabbitMQ';
 
 const app = express();
 
@@ -30,7 +31,7 @@ const run = async () => {
     }
 
     try {
-        //await connectRabbitMQ();
+        await connectRabbitMQ();
     } catch (e: unknown) {
         if (e instanceof Error) {
             console.error(e.message);

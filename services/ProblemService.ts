@@ -1,5 +1,7 @@
+import { ProblemRepository } from "../repositories/ProblemRepository";
 import { SubmissionRepository } from "../repositories/SubmissionRepository";
 import { TopicRepository } from "../repositories/TopicRepository";
+import { UserRepository } from "../repositories/UserRepository";
 
 type VeredictInfo = {
     name: string;
@@ -84,4 +86,49 @@ export const getProblemStats = async (userId: number): Promise<ProblemStats> => 
         total_solved: veredictCounts["Accepted"],
         average_attempts: averageAttempts
     };
+}
+
+export const createProblem = async (id: number, difficulty: string, topicId: number) => {
+    console.log(`Creating problem with id ${id}, difficulty ${difficulty}, topicId ${topicId}`);
+    const topic = await TopicRepository.findOne({ where: { id: topicId } });
+    if (!topic) {
+        throw new Error(`Topic with id ${topicId} not found`);
+    }
+
+    const problem = await ProblemRepository.create({
+        id,
+        difficulty,
+        topic
+    });
+    await ProblemRepository.save(problem);
+}
+
+export const createTopic = async (id: number, name: string) => {
+    console.log(`Creating topic with id ${id}, name ${name}`);
+    const topic = await TopicRepository.create({
+        id,
+        name
+    });
+    await TopicRepository.save(topic);
+}
+
+export const createSubmission = async (id: string, userId: number, problemId: number, veredict: string, time: Date) => {
+    console.log(`Creating submission with id ${id}, userId ${userId}, problemId ${problemId}, veredict ${veredict}, time ${time}`);
+    const problem = await ProblemRepository.findOne({ where: { id: problemId } });
+    if (!problem) {
+        throw new Error(`Problem with id ${problemId} not found`);
+    }
+    const user = await UserRepository.findOne({ where: { id: userId } });
+    if (!user) {
+        throw new Error(`User with id ${userId} not found`);
+    }
+
+    const submission = await SubmissionRepository.create({
+        id,
+        user,
+        problem,
+        veredict,
+        time
+    });
+    await SubmissionRepository.save(submission);
 }
